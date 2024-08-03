@@ -1,0 +1,72 @@
+server:
+  port: 9191
+
+spring:
+  application:
+    name: client
+  datasource:
+    hikari:
+      maximum-pool-size: 4
+      data-source-properties:
+        oracle.jdbc.implicitStatementCacheSize: 100
+        oracle.jdbc.defaultConnectionValidation: LOCAL
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        generate_statistics: true
+        order_inserts: true
+        order_updates: true
+        session:
+          events:
+            log:
+              LOG_QUERIES_SLOWER_THAN_MS: 10
+        cache:
+          use_second_level_cache: false
+        jdbc:
+          batch_size: 100
+          use_get_generated_keys: true
+          batch_versioned_data: true
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java , src/main/resources
+    livereload:
+      enabled: true
+  web:
+    locale: en_US # fr_FR
+    locale-resolver: fixed
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    doc-expansion: none
+
+cors:
+  allowed-origins: http://localhost:3300,http://localhost:3000,http://localhost:9191
+  allowed-methods: '*'
+  allowed-headers: '*'
+
+logging:
+  level:
+    org:
+      hibernate :
+      springframework:
+        web: INFO
+        security: debug
+        jpa: info
+        transaction: trace
+      hibernate.orm.sql: info
+      hibernate.orm.jdbc.extract: info
+      hibernate.orm.jdbc.bind: info
